@@ -1,7 +1,7 @@
-package io.github.dunant74;
+package io.github.dunanttonfack;
 
 public class ReverseString {
-    public static String reverString (String s){
+    public static String revereString (String s){
         String result = "";
         if( s != null){
             for(int i = s.length() - 1; i >= 0; i--){
@@ -15,6 +15,6 @@ public class ReverseString {
 
         String s = "java";
 
-        System.out.println(reverString(s));
+        System.out.println(revereString(s));
     }
 }

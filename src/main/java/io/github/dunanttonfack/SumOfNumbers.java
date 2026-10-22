@@ -1,14 +1,14 @@
-package io.github.dunant74;
+package io.github.dunanttonfack;
 
 public class SumOfNumbers {
 
     public static void main(String[] args) {
 
-        int ergebnis = 0;
+        int sum = 0;
         for (int i = 1; i <= 100; i++){
-            ergebnis += i;
+            sum += i;
         }
 
-        System.out.print(ergebnis);
+        System.out.print(sum);
     }
 }

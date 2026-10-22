@@ -1,10 +1,10 @@
-package io.github.dunant74;
+package io.github.dunanttonfack;
 
 public class MaxInArray {
 
     public static int maxArray(int[] array){
-        if(array == null){
-            return -1;
+        if(array == null || array.length == 0){
+            throw new IllegalArgumentException("Array must not be null or empty");
         }
         int max = array[0];
 

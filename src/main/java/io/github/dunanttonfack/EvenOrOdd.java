@@ -1,13 +1,13 @@
-package io.github.dunant74;
+package io.github.dunanttonfack;
 
 public class EvenOrOdd {
     public static void evenOrOdd (int [] array){
         if (array != null) {
             for (int j : array) {
                 if (j % 2 == 0) {
-                    System.out.println(j + " ist even");
+                    System.out.println(j + " is even");
                 } else {
-                    System.out.println(j + " ist odd");
+                    System.out.println(j + " is odd");
                 }
             }
         }
