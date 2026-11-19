@@ -37,5 +37,35 @@ public class BudgetDemo {
             System.out.println("OK: the transaction list is read-only");
         }
         System.out.println("Number of transactions: " + budget.getTransactions().size());
+
+        // -------------- TESTS Exceptions ---------------------------------
+        System.out.println("\n");
+
+        try {
+            budget.checkLimit(new BigDecimal("500"));
+            System.out.println("Within budget");
+        } catch (BudgetLimitExceededException e) {
+            System.out.println("Alert: " + e.getMessage());
+        } finally {
+            System.out.println("Limit check finished");
+        }
+
+        try {
+            budget.checkLimit(new BigDecimal("1000"));
+            System.out.println("Within budget");
+        } catch (BudgetLimitExceededException e) {
+            System.out.println("Alert: " + e.getMessage());
+        } finally {
+            System.out.println("Limit check finished");
+        }
+
+        try {
+            budget.addTransaction(new Expense(new BigDecimal("-80.00"), "Market", "Groceries"));
+            System.out.println("ERROR: no exception for negative amount");
+        } catch (InvalidAmountException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            System.out.println("Amount check finished");
+        }
     }
 }

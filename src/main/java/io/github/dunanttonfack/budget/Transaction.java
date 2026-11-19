@@ -14,7 +14,8 @@ public abstract class Transaction implements Reportable {
         Objects.requireNonNull(descriptoin, "Description must not be null");
 
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Amount must be positive");
+            //throw new IllegalArgumentException("Amount must be positive");
+            throw new InvalidAmountException("Amount must be positive, got: " + amount);
         }
 
         //if (description.isBlank()) {

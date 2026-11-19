@@ -57,4 +57,24 @@ public class Budget {
 
         return List.copyOf(transactions);
     }
+
+    public BigDecimal getTotalExpenses() {
+
+        BigDecimal result = BigDecimal.ZERO;
+
+        for (Transaction t : transactions) {
+
+            if (t instanceof Expense e) {
+                result = result.add(e.getAmount());
+            }
+        }
+        return result;
+    }
+
+    public void checkLimit(BigDecimal limit) throws BudgetLimitExceededException {
+        BigDecimal expenses = getTotalExpenses();
+        if (expenses.compareTo(limit) > 0) {
+            throw new BudgetLimitExceededException("Expenses " + expenses + " exceed limit " + limit);
+        }
+    }
 }
