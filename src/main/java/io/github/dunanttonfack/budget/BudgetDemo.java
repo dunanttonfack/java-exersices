@@ -21,6 +21,7 @@ public class BudgetDemo {
         Set<String> categories = budget.getCategories();
         System.out.println("Categories: " + categories);
         System.out.println("Total: " + budget.getTotalByCategory());
+        System.out.println("Total Expense: " + budget.getTotalExpenses());
 
         try {
             budget.addTransaction(null);

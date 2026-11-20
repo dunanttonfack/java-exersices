@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class Budget {
     private final List<Transaction> transactions = new ArrayList<>();
@@ -20,37 +21,29 @@ public class Budget {
 
     public BigDecimal getBalance() {
 
-        BigDecimal balance = BigDecimal.ZERO;
-
-        for (Transaction t : transactions) {
-            balance = balance.add(t.signedAmount());
-        }
-        return balance;
+        return transactions.stream()
+                .map(Transaction::signedAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public Set<String> getCategories() {
-        Set<String> categories = new TreeSet<>();
-
-        for (Transaction t : transactions) {
-
-            if (t instanceof Expense e) {
-                categories.add(e.getCategory());
-            }
-        }
-
-        return categories;
+        return transactions.stream()
+                .filter(Expense.class::isInstance)
+                .map(Expense.class::cast)
+                .map(Expense::getCategory)
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 
     public Map<String, BigDecimal> getTotalByCategory() {
-
-        Map<String, BigDecimal> totalByCategory = new TreeMap<>();
-
-        for (Transaction t : transactions) {
-            if (t instanceof Expense e) {
-                totalByCategory.merge(e.getCategory(), e.getAmount(), BigDecimal::add);
-            }
-        }
-        return totalByCategory;
+        return transactions.stream()
+                .filter(Expense.class::isInstance)
+                .map(Expense.class::cast)
+                .collect(Collectors.toMap(
+                        e -> e.getCategory(),
+                        Expense::getAmount,
+                        BigDecimal::add,
+                        TreeMap::new
+                ));
     }
 
     public List<Transaction> getTransactions() {
@@ -60,15 +53,10 @@ public class Budget {
 
     public BigDecimal getTotalExpenses() {
 
-        BigDecimal result = BigDecimal.ZERO;
-
-        for (Transaction t : transactions) {
-
-            if (t instanceof Expense e) {
-                result = result.add(e.getAmount());
-            }
-        }
-        return result;
+        return transactions.stream()
+                .filter(Expense.class::isInstance)
+                .map(Transaction::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void checkLimit(BigDecimal limit) throws BudgetLimitExceededException {

@@ -27,15 +27,31 @@ public class AufgabeStreams2 {
 
         /*
 
-        BigDecimal totalExpense = depenses.streams()
-                       .map(Expense::amount)
-                       .
+        BigDecimal totalExpense = depenses.stream()
+                       .map(Expense::amount) // map ( d -> d.amount())
+                       .reduce(BigDecimal.ZERO, BigDecimal::add); // reduce( BigDecimal.ZERO, (x, y) -> x.add(y)
 
+         Map<String, Long> anzahlElmenteProCategory = depenses.stream()
+                        .collect(Collectors.groupingBy(
+                            Expense::category, // expense -> expense.category()
+                            TreeMap::new , // () -> new TreeMap<String, Long>()
+                            Collectors.counting()
+                            ));
 
+         String s = depenses.stream()
+                    .map ( Expense::category)   // map( expense -> expense.category())
+                    .distinct()
+                    .sorted()
+                    .collect(Collectors.joining( " | " ));
 
-
-
-
+         BigDecimal limit = new BigDecimal("12");
+         Map<String, BigDecimal> totalCategory12 = depenses.stream()
+                    .filter (expense -> expense.amount().compareTo(limit) > 0 )
+                    .collect (Collectors.groupingBy(
+                      Expense::category,    //expense -> expense.category()
+                      TreeMap::new,
+                      Collectors.reducing(BigDecimal.ZERO, Expense::amount, BigDecimal::add) //Collectors.reducing(BigDecimal.ZERO, (y -> (y.amount()), (x, y) -> x.add(y))
+                    ));
 
          */
 
