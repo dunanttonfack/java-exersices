@@ -2,6 +2,7 @@ package io.github.dunanttonfack.budget;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -59,10 +60,27 @@ public class Budget {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public List<Transaction> getExpensesAbove(BigDecimal min) {
+
+        return transactions.stream()
+                .filter(Expense.class::isInstance)
+                .filter(expense -> expense.getAmount().compareTo(min) > 0)
+                .collect(Collectors.toList());
+    }
+
+    public List<Transaction> getTransactionsSortedByAmount() {
+
+        return transactions.stream()
+                .sorted(Comparator.comparing(Transaction::getAmount).reversed())
+                .toList();
+    }
+
     public void checkLimit(BigDecimal limit) throws BudgetLimitExceededException {
         BigDecimal expenses = getTotalExpenses();
         if (expenses.compareTo(limit) > 0) {
             throw new BudgetLimitExceededException("Expenses " + expenses + " exceed limit " + limit);
         }
     }
+
+
 }

@@ -23,6 +23,10 @@ public class BudgetDemo {
         System.out.println("Total: " + budget.getTotalByCategory());
         System.out.println("Total Expense: " + budget.getTotalExpenses());
 
+        System.out.println("Expenses above 100: " + budget.getExpensesAbove(new BigDecimal("100")).size());   // 2
+        budget.getTransactionsSortedByAmount()
+                .forEach(t -> System.out.println(t.getAmount()));   // 1400.00, 450.00, 120.00, 80.00, 50.00, 30.00
+
         try {
             budget.addTransaction(null);
             System.out.println("ERROR: no exception for null");
