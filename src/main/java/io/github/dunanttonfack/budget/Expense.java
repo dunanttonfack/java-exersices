@@ -1,15 +1,16 @@
 package io.github.dunanttonfack.budget;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Objects;
 
 public class Expense extends Transaction {
 
-    private String category;
+    private Category category;
 
-    public Expense(BigDecimal amount, String descriptoin, String category) {
-        super(amount, descriptoin);
-        if (category.isBlank()) throw new IllegalArgumentException("Category must be not Blank");
-        this.category = category;
+    public Expense(BigDecimal amount, String description, Category category, LocalDate date) {
+        super(amount, description, date);
+        this.category = Objects.requireNonNull(category, "Category must not be null");
     }
 
     @Override
@@ -17,7 +18,7 @@ public class Expense extends Transaction {
         return getAmount().negate();
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 

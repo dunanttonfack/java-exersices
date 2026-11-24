@@ -1,13 +1,15 @@
 package io.github.dunanttonfack.budget;
 
 import java.math.BigDecimal;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -27,7 +29,7 @@ public class Budget {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public Set<String> getCategories() {
+    public Set<Category> getCategories() {
         return transactions.stream()
                 .filter(Expense.class::isInstance)
                 .map(Expense.class::cast)
@@ -35,7 +37,7 @@ public class Budget {
                 .collect(Collectors.toCollection(TreeSet::new));
     }
 
-    public Map<String, BigDecimal> getTotalByCategory() {
+    public Map<Category, BigDecimal> getTotalByCategory() {
         return transactions.stream()
                 .filter(Expense.class::isInstance)
                 .map(Expense.class::cast)
@@ -43,7 +45,7 @@ public class Budget {
                         e -> e.getCategory(),
                         Expense::getAmount,
                         BigDecimal::add,
-                        TreeMap::new
+                        () -> new EnumMap<>(Category.class)
                 ));
     }
 
@@ -80,6 +82,33 @@ public class Budget {
         if (expenses.compareTo(limit) > 0) {
             throw new BudgetLimitExceededException("Expenses " + expenses + " exceed limit " + limit);
         }
+    }
+
+    public MonthlySummary getMonthlySummary(YearMonth month) {
+        Objects.requireNonNull(month, "Month must not be null");
+
+        List<Transaction> ofMonth = transactions.stream()
+                .filter(t -> YearMonth.from(t.getDate()).equals(month))
+                .toList();
+
+        BigDecimal income = ofMonth.stream()
+                .filter(Income.class::isInstance)
+                .map(Transaction::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal expenses = ofMonth.stream()
+                .filter(Expense.class::isInstance)
+                .map(Transaction::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new MonthlySummary(month, income, expenses);
+    }
+
+    public Optional<Expense> findLargestExpense() {
+        return transactions.stream()
+                .filter(Expense.class::isInstance)
+                .map(Expense.class::cast)
+                .max(Comparator.comparing(Expense::getAmount));
     }
 
 
