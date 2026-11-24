@@ -11,12 +11,12 @@ public class BudgetDemo {
 
         Budget budget = new Budget();
 
-        budget.addTransaction(new Income(new BigDecimal("1400.00"), "Monthly salary", "Salary", LocalDate.of(2026, 11, 1)));
-        budget.addTransaction(new Income(new BigDecimal("50.00"), "Tutoring lesson", "Tutoring", LocalDate.of(2026, 11, 8)));
-        budget.addTransaction(new Expense(new BigDecimal("450.00"), "Monthly rent", Category.HOUSING, LocalDate.of(2026, 11, 1)));
-        budget.addTransaction(new Expense(new BigDecimal("120.00"), "Supermarket", Category.GROCERIES, LocalDate.of(2026, 11, 5)));
-        budget.addTransaction(new Expense(new BigDecimal("30.00"), "Cinema", Category.LEISURE, LocalDate.of(2026, 11, 12)));
-        budget.addTransaction(new Expense(new BigDecimal("80.00"), "Market", Category.GROCERIES, LocalDate.of(2026, 10, 28)));
+        budget.addTransaction(new Income(new BigDecimal("1400.00"), "Monthly salary", LocalDate.of(2026, 11, 1), "Salary"));
+        budget.addTransaction(new Income(new BigDecimal("50.00"), "Tutoring lesson", LocalDate.of(2026, 11, 8), "Tutoring"));
+        budget.addTransaction(new Expense(new BigDecimal("450.00"), "Monthly rent", LocalDate.of(2026, 11, 1), Category.HOUSING));
+        budget.addTransaction(new Expense(new BigDecimal("120.00"), "Supermarket", LocalDate.of(2026, 11, 5), Category.GROCERIES));
+        budget.addTransaction(new Expense(new BigDecimal("30.00"), "Cinema", LocalDate.of(2026, 11, 12), Category.LEISURE));
+        budget.addTransaction(new Expense(new BigDecimal("80.00"), "Market", LocalDate.of(2026, 10, 28), Category.GROCERIES));
         System.out.println("Balance: " + budget.getBalance());
 
         Set<Category> categories = budget.getCategories();
@@ -37,7 +37,7 @@ public class BudgetDemo {
 
 
         try {
-            budget.getTransactions().add(new Expense(new BigDecimal("40.00"), "Market", Category.GROCERIES, LocalDate.of(2026, 11, 1)));
+            budget.getTransactions().add(new Expense(new BigDecimal("40.00"), "Market", LocalDate.of(2026, 11, 1), Category.GROCERIES));
             System.out.println("ERROR: the list should be read-only");
         } catch (UnsupportedOperationException e) {
             System.out.println("OK: the transaction list is read-only");
@@ -66,7 +66,7 @@ public class BudgetDemo {
         }
 
         try {
-            budget.addTransaction(new Expense(new BigDecimal("-80.00"), "Market", Category.GROCERIES, LocalDate.of(2026, 11, 1)));
+            budget.addTransaction(new Expense(new BigDecimal("-80.00"), "Market", LocalDate.of(2026, 11, 1), Category.GROCERIES));
             System.out.println("ERROR: no exception for negative amount");
         } catch (InvalidAmountException e) {
             System.out.println("Error: " + e.getMessage());

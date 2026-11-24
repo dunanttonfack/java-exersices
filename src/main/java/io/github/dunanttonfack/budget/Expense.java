@@ -8,7 +8,7 @@ public class Expense extends Transaction {
 
     private Category category;
 
-    public Expense(BigDecimal amount, String description, Category category, LocalDate date) {
+    public Expense(BigDecimal amount, String description, LocalDate date, Category category) {
         super(amount, description, date);
         this.category = Objects.requireNonNull(category, "Category must not be null");
     }
